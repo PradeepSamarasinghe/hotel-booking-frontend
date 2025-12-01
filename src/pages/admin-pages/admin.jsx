@@ -1,0 +1,66 @@
+import { Link } from "react-router-dom";
+import {
+  CiBookmarkCheck,
+  CiViewList,
+  CiBoxes,
+  CiUser,
+  CiChat1,
+  CiImageOn,
+} from "react-icons/ci";
+import { Routes, Route } from "react-router-dom";
+import AdminBooking from "../admin/bookings/adminBookings.jsx";
+import AdminCategories from "../admin/categories/adminCategories.jsx";
+import AdminRooms from "../admin/rooms/adminRooms.jsx";
+import AdminUsers from "../admin/users/adminUsers.jsx";
+import AdminFeedback from "../admin/feedback/adminFeedback.jsx";
+import AdminGalleryItem from "../admin/galleryItem/adminGalleryItem.jsx";
+
+
+export default function AdminPage() {
+  return (
+    <div className="w-full max-height-[100vh] flex">
+      <div className="w-[20%] bg-blue-300 h-[100vh] flex flex-col gap-5 p-6">
+        <div className="text-white hover:text-blue-500 hover:font-bold flex items-center gap-2 py-1">
+          <CiBookmarkCheck />
+          <Link to="/admin/bookings">Bookings</Link>
+        </div>
+
+        <div className="text-white hover:text-blue-500 hover:font-bold flex items-center gap-2">
+          <CiViewList />
+          <Link to="/admin/categories">Categories</Link>
+        </div>
+
+        <div className="text-white hover:text-blue-500 hover:font-bold flex items-center gap-2">
+          <CiBoxes />
+          <Link to="/admin/rooms">Rooms</Link>
+        </div>
+
+        <div className="text-white hover:text-blue-500 hover:font-bold flex items-center gap-2">
+          <CiUser />
+          <Link to="/admin/users">Users</Link>
+        </div>
+
+        <div className="text-white hover:text-blue-500 hover:font-bold flex items-center gap-2">
+          <CiChat1 />
+          <Link to="/admin/feedback">Feedback</Link>
+        </div>
+
+        <div className="text-white hover:text-blue-500 hover:font-bold flex items-center gap-2">
+          <CiImageOn />
+          <Link to="/admin/galleryItem">Gallery Item</Link>
+        </div>
+      </div>
+
+      <div className="w-[80%] max-h-[100vh] overflow-y-scroll bg-blue-900">
+        <Routes>
+            <Route path="/bookings" element={<AdminBooking />} />
+            <Route path="/categories" element={<AdminCategories />} />
+            <Route path="/rooms" element={<AdminRooms />} />
+            <Route path="/users" element={<AdminUsers />} />
+            <Route path="/feedback" element={<AdminFeedback />} />
+            <Route path="/galleryItem" element={<AdminGalleryItem />} />
+        </Routes>
+      </div>
+    </div>
+  );
+}
