@@ -12,16 +12,16 @@ export default function LoginPage() {
             email: email,
             password: password
         }).then((res) => {
-            // console.log(res.data);
+            console.log("Login Response:", res.data); // Debug: check the response structure
             localStorage.setItem("token", res.data.token);
-
-            // const token = localStorage.getItem("token");
-            // console.log("Stored Token:", token);
-            // console.log("Login Response Data:", res.data.userData);
             
-            if(res.data.isAdmin) {
+            // Check if user is admin - handle different response structures
+            const user = res.data.user || res.data.userData;
+            const isAdmin = res.data.isAdmin || (user && user.type === "admin");
+            
+            if(isAdmin) {
                 window.location.href = "/admin";
-            }else{
+            } else {
                 window.location.href = "/";
             }
             
