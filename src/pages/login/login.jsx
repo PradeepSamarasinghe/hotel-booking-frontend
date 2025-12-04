@@ -12,18 +12,18 @@ export default function LoginPage() {
             email: email,
             password: password
         }).then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             localStorage.setItem("token", res.data.token);
-            alert("Login Successful");
 
-            const token = localStorage.getItem("token");
-            console.log("Stored Token:", token);
-
-            // if(res.data.isAdmin) {
-            //     window.location.href = "/admin";
-            // }else{
-            //     window.location.href = "/";
-            // }
+            // const token = localStorage.getItem("token");
+            // console.log("Stored Token:", token);
+            // console.log("Login Response Data:", res.data.userData);
+            
+            if(res.data.isAdmin) {
+                window.location.href = "/admin";
+            }else{
+                window.location.href = "/";
+            }
             
         }).catch((err) => {
             console.log(err);
