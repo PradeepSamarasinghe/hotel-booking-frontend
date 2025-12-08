@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useState, useEffect } from "react"
 import toast from "react-hot-toast"
+import {useNavigate} from "react-router-dom" 
 
 export default function AdminCategories() {
 
@@ -12,6 +13,7 @@ export default function AdminCategories() {
 
   const [categories, setCategories] = useState([])
   const [categoryIsLoaded, setCategoryIsLoaded] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!categoryIsLoaded) {
@@ -43,6 +45,12 @@ export default function AdminCategories() {
     })
   }
 
+  function addCategory() {
+    // console.log("Added")
+    // window.location.href = "/admin/AddCategoryForm"
+    navigate("/admin/addCategoryForm")
+  }
+
   return (
     <div className="w-full p-6 bg-amber-300">
       <h1 className="text-3xl font-bold text-white mb-6">Categories Management</h1>
@@ -50,7 +58,9 @@ export default function AdminCategories() {
       <div className="bg-white rounded-lg shadow-lg p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-800">All Categories</h2>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
+          <button onClick={() => {
+            addCategory()
+          }} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
             + Add Category
           </button>
         </div>

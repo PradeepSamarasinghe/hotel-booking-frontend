@@ -1,8 +1,7 @@
 import HomePage from "./pages/client-pages/homePage.jsx";
-import AdminPage from "./pages/admin-pages/admin.jsx";
+import AdminPage from "./pages/admin/admin.jsx";
 import LoginPage from "./pages/login/login.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Divide } from "lucide-react";
 import Categories from "./pages/client-pages/categories.jsx";
 import Test from "./components/tes/test.jsx";
 import { Toaster } from "react-hot-toast"; 
