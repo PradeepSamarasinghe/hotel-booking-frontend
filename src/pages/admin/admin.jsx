@@ -8,12 +8,13 @@ import {
   CiImageOn,
 } from "react-icons/ci";
 import { Routes, Route } from "react-router-dom";
-import AdminBooking from "../admin/bookings/adminBookings.jsx";
-import AdminCategories from "../admin/categories/adminCategories.jsx";
-import AdminRooms from "../admin/rooms/adminRooms.jsx";
-import AdminUsers from "../admin/users/adminUsers.jsx";
-import AdminFeedback from "../admin/feedback/adminFeedback.jsx";
-import AdminGalleryItem from "../admin/galleryItem/adminGalleryItem.jsx";
+import AdminBooking from "../admin-pages/bookings/adminBookings.jsx";
+import AdminCategories from "../admin-pages/categories/adminCategories.jsx";
+import AdminRooms from "../admin-pages/rooms/adminRooms.jsx";
+import AdminUsers from "../admin-pages/users/adminUsers.jsx";
+import AdminFeedback from "../admin-pages/feedback/adminFeedback.jsx";
+import AdminGalleryItem from "../admin-pages/galleryItem/adminGalleryItem.jsx";
+import AddCategoryForm from "../admin-pages/addCategoryForm/addCategoryForm.jsx";
 
 
 export default function AdminPage() {
@@ -55,6 +56,7 @@ export default function AdminPage() {
         <Routes>
             <Route path="/bookings" element={<AdminBooking />} />
             <Route path="/categories" element={<AdminCategories />} />
+            <Route path="/addCategoryForm" element={<AddCategoryForm />} />
             <Route path="/rooms" element={<AdminRooms />} />
             <Route path="/users" element={<AdminUsers />} />
             <Route path="/feedback" element={<AdminFeedback />} />
