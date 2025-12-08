@@ -69,21 +69,22 @@ export default function AdminCategories() {
           <table className="w-full table-auto">
             <thead className="bg-gray-100">
               <tr>
-                <th className="px-4 py-3 text-left text-gray-600">Num</th>
+                
                 <th className="px-4 py-3 text-left text-gray-600">Name</th>
-                <th className="px-4 py-3 text-left text-gray-600">Description</th>
                 <th className="px-4 py-3 text-left text-gray-600">Price</th>
                 <th className="px-4 py-3 text-left text-gray-600">Features</th>
+                <th className="px-4 py-3 text-left text-gray-600">Description</th>
+                <th className="px-4 py-3 text-left text-gray-600">Image</th>
                 <th className="px-4 py-3 text-left text-gray-600">Actions</th>
+
               </tr>
             </thead>
 
             <tbody>
               {categories.map((category, index) => (
                 <tr key={category._id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-3">{index + 1}</td>
+                  
                   <td className="px-4 py-3">{category.name}</td>
-                  <td className="px-4 py-3">{category.description}</td>
                   <td className="px-4 py-3">Rs. {category.price}</td>
                   <td className="px-4 py-3 flex">
                     <ul className="">
@@ -92,6 +93,11 @@ export default function AdminCategories() {
                     ))}
                     </ul>
                   </td>
+                  <td className="px-4 py-3">{category.description}</td>
+                  <td className="px-4 py-3">
+                    <img src={category.image} alt={category.name} className="w-20 h-20 object-cover rounded-md" />
+                  </td>
+            
                   <td className="px-4 py-3">
                     <button className="text-blue-500 hover:text-blue-700 mr-2">
                       Edit
