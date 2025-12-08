@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { uploadImage } from "../../../utils/mediaUpload.js";
+import axios from "axios";
 
 export default function AddCategoryForm() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [features, setFeatures] = useState(""); // comma-separated
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -23,18 +25,44 @@ export default function AddCategoryForm() {
       return;
     }
 
+    const featuresArray = features.split(",").map((f) => f.trim()).filter((f) => f);
+    console.log("Features Array:", featuresArray);
+
     try {
-      // uploadImage(file, path, onProgress)
-      const result = await uploadImage(image, "categories", (p) => {
-        console.log("Upload progress:", p, "%");
-      });
+      // Upload image and get URL
+      const result = await uploadImage(image, "categories");
+      const imageUrl = result.url;
 
-      // uploadImage resolves with { url }
-      console.log("Download URL:", result.url);
+      // Prepare category data
+      const categoryData = {
+        name: name,
+        price: price,
+        features: featuresArray,
+        description: description,
+        image: imageUrl,
+      };
 
-      // continue: send category payload to backend using result.url
-    } catch (err) {
-      console.error("Upload failed:", err);
+      // Send to backend
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/category`,
+        categoryData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("Category added successfully!");
+      // Reset form
+      setName("");
+      setPrice(0);
+      setFeatures("");
+      setDescription("");
+      setImage(null);
+    } catch (error) {
+      console.error("Error adding category:", error);
+      alert("Failed to add category. Please try again.");
     }
   }
 
