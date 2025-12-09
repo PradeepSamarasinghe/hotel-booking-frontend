@@ -2,12 +2,15 @@ import { useState } from "react";
 import { uploadImage } from "../../../utils/mediaUpload.js";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function AddGalleryItemForm() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
@@ -54,6 +57,7 @@ export default function AddGalleryItemForm() {
       );
 
       toast("Gallery item added successfully", { type: "success" });
+      navigate("/admin/galleryItem");
 
       // Reset form
       setName("");

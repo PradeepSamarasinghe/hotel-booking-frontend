@@ -57,9 +57,6 @@ export default function AdminGalleryItem() {
     navigate("/admin/addGalleryItemForm");
   };
 
-  const handleEdit = (item) => {
-    navigate("/admin/updateGalleryItemForm", { state: item });
-  };
 
   return (
     <div className="w-full p-6">
@@ -104,12 +101,12 @@ export default function AdminGalleryItem() {
                   className="w-full h-48 object-cover"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded text-sm"
-                  >
-                    Edit
-                  </button>
+                  <Link className="text-blue-500 hover:text-blue-700 mr-2"
+                    to={"/admin/updateGalleryItemForm"}
+                    state = {item}>
+                    
+                      Edit
+                    </Link>
                   <button
                     onClick={() => handleDelete(item._id ?? item.id)}
                     className="bg-red-500 text-white px-3 py-1 rounded text-sm"
