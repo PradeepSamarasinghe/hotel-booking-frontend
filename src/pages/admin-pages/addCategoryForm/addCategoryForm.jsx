@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { uploadImage } from "../../../utils/mediaUpload.js";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function AddCategoryForm() {
   const [name, setName] = useState("");
@@ -12,29 +13,41 @@ export default function AddCategoryForm() {
 
   const token = localStorage.getItem("token");
 
+  // if no token, redirect to login (optional: do this in useEffect)
   if (!token) {
     window.location.href = "/login";
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log("Submitting:");
+
+    // simple client-side validation
+    if (!name || !description || price == null) {
+      return alert("Please fill name, price and description");
+    }
 
     if (!image) {
-      console.warn("No image selected");
-      return;
+      return alert("Please choose an image for the category");
     }
+
     setIsLoading(true);
 
-    const featuresArray = features.split(",").map((f) => f.trim()).filter((f) => f);
-    console.log("Features Array:", featuresArray);
+    // prepare features array
+    const featuresArray = features
+      .split(",")
+      .map((f) => f.trim())
+      .filter(Boolean);
 
     try {
-      // Upload image and get URL
+      // upload image
       const result = await uploadImage(image, "categories");
-      const imageUrl = result.url;
 
-      // Prepare category data
+      // support different upload return shapes
+      const imageUrl = result?.url ?? result?.secure_url ?? null;
+      if (!imageUrl) {
+        throw new Error("Image upload failed (no URL returned)");
+      }
+
       const categoryData = {
         name: name,
         price: price,
@@ -43,28 +56,32 @@ export default function AddCategoryForm() {
         image: imageUrl,
       };
 
-      // Send to backend
-      await axios.post(
+      // send to backend (await and handle errors in catch)
+      const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/category`,
         categoryData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
 
-      // Reset form
+      // success
+      toast("Category added successfully", { type: "success" });
+      // optionally reset form
       setName("");
       setPrice(0);
       setFeatures("");
       setDescription("");
       setImage(null);
     } catch (error) {
-      console.error("Error adding category:", error);
-      alert("Failed to add category. Please try again.");
-    }finally {
-        setIsLoading(false);
+      // show detailed error: server response body if present, otherwise message
+      console.error("Error adding category (detailed):", error);
+
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -133,14 +150,11 @@ export default function AddCategoryForm() {
           type="submit"
           className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded flex justify-center items-center gap-2"
         >
-            {
-                isLoading?
-                <div className="border-t-2 border-t-white w-[20px] min-h-[20px] rounded-full animate-spin"></div>
-                :
-                <span>Add Category</span>
-
-            }
-          
+          {isLoading ? (
+            <div className="border-t-2 border-t-white w-[20px] min-h-[20px] rounded-full animate-spin"></div>
+          ) : (
+            <span>Add Category</span>
+          )}
         </button>
       </form>
     </div>

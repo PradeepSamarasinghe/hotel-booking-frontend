@@ -1,10 +1,20 @@
 import { useState } from "react";
 import { uploadImage } from "../../../utils/mediaUpload.js";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function UpdateCategory() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  if (!location.state) {
+    // redirect and stop rendering
+    window.location.href = "/admin/categories";
+    return null;
+  }
+
   const [name, setName] = useState(location.state.name);
   const [price, setPrice] = useState(location.state.price);
   const [features, setFeatures] = useState(location.state.features.join(", ")); // comma-separated
@@ -16,58 +26,91 @@ export default function UpdateCategory() {
 
   if (!token) {
     window.location.href = "/login";
+    return null;
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
     console.log("Submitting:");
 
-    if (!image) {
-      console.warn("No image selected");
-      return;
-    }
-    setIsLoading(true);
-
+    // build features array
     const featuresArray = features
       .split(",")
       .map((f) => f.trim())
-      .filter((f) => f);
+      .filter(Boolean);
     console.log("Features Array:", featuresArray);
 
+    setIsLoading(true);
+
     try {
-      // Upload image and get URL
-      const result = await uploadImage(image, "categories");
-      const imageUrl = result.url;
+      // If no new image selected — just update using existing image URL
+      if (!image) {
+        const categoryData = {
+          price: price,
+          features: featuresArray,
+          description: description,
+          image: location.state.image, // keep existing image
+        };
 
-      // Prepare category data
-      const categoryData = {
-        name: name,
-        price: price,
-        features: featuresArray,
-        description: description,
-        image: imageUrl,
-      };
+        await axios.put(
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }/api/category/${encodeURIComponent(name)}`,
+          categoryData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-      // Send to backend
-      await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/category`,
-        categoryData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        toast("Category updated successfully", { type: "success" });
+        navigate("/admin/categories");
+        return;
+      } else {
+        // Upload image and get URL
+        const result = await uploadImage(image, "categories");
+        const imageUrl = result?.url ?? result?.secure_url ?? null;
+        if (!imageUrl) {
+          throw new Error("Image upload failed (no URL returned)");
         }
-      );
 
-      // Reset form
-      setName("");
-      setPrice(0);
-      setFeatures("");
-      setDescription("");
-      setImage(null);
+        // Prepare category data with new image
+        const categoryData = {
+          price: price,
+          features: featuresArray,
+          description: description,
+          image: imageUrl,
+        };
+
+        // Send to backend
+        await axios.put(
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }/api/category/${encodeURIComponent(name)}`,
+          categoryData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        toast("Category updated successfully", { type: "success" });
+        navigate("/admin/categories");
+      }
+
+      // Optionally reset form fields (I keep them as-is so admin can see new state)
+      // setName("");
+      // setPrice(0);
+      // setFeatures("");
+      // setDescription("");
+      // setImage(null);
     } catch (error) {
-      console.error("Error adding category:", error);
-      alert("Failed to add category. Please try again.");
+      console.error("Error updating category:", error);
+      toast("Failed to update category", { type: "error" });
     } finally {
       setIsLoading(false);
     }
@@ -85,6 +128,7 @@ export default function UpdateCategory() {
             onChange={(e) => setName(e.target.value)}
             className="w-full border rounded px-3 py-2"
             required
+            disabled //name cannot be changed
           />
         </div>
 
@@ -129,7 +173,7 @@ export default function UpdateCategory() {
             accept="image/*"
             onChange={(e) => setImage(e.target.files[0])}
             className="border rounded w-[100px] text-sm"
-            required
+            /* not required so admin can keep existing image */
           />
           <span>{image ? image.name : ""}</span>
         </div>
@@ -137,6 +181,7 @@ export default function UpdateCategory() {
         <button
           type="submit"
           className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded flex justify-center items-center gap-2"
+          disabled={isLoading}
         >
           {isLoading ? (
             <div className="border-t-2 border-t-white w-[20px] min-h-[20px] rounded-full animate-spin"></div>
