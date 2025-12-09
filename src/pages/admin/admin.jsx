@@ -21,6 +21,8 @@ import UpdateGalleryItemForm from "../admin-pages/updateGalleryItemForm/updateGa
 
 
 export default function AdminPage() {
+
+  
   return (
     <div className="w-full max-height-[100vh] flex">
       <div className="w-[20%] bg-blue-300 h-[100vh] flex flex-col gap-5 p-6">
