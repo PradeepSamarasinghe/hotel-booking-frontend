@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { uploadImage } from "../../../utils/mediaUpload.js";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 export default function UpdateCategory() {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
-  const [features, setFeatures] = useState(""); // comma-separated
-  const [description, setDescription] = useState("");
+  const location = useLocation();
+  const [name, setName] = useState(location.state.name);
+  const [price, setPrice] = useState(location.state.price);
+  const [features, setFeatures] = useState(location.state.features.join(", ")); // comma-separated
+  const [description, setDescription] = useState(location.state.description);
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,7 +28,10 @@ export default function UpdateCategory() {
     }
     setIsLoading(true);
 
-    const featuresArray = features.split(",").map((f) => f.trim()).filter((f) => f);
+    const featuresArray = features
+      .split(",")
+      .map((f) => f.trim())
+      .filter((f) => f);
     console.log("Features Array:", featuresArray);
 
     try {
@@ -63,8 +68,8 @@ export default function UpdateCategory() {
     } catch (error) {
       console.error("Error adding category:", error);
       alert("Failed to add category. Please try again.");
-    }finally {
-        setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -133,14 +138,11 @@ export default function UpdateCategory() {
           type="submit"
           className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded flex justify-center items-center gap-2"
         >
-            {
-                isLoading?
-                <div className="border-t-2 border-t-white w-[20px] min-h-[20px] rounded-full animate-spin"></div>
-                :
-                <span>Update Category</span>
-
-            }
-          
+          {isLoading ? (
+            <div className="border-t-2 border-t-white w-[20px] min-h-[20px] rounded-full animate-spin"></div>
+          ) : (
+            <span>Update Category</span>
+          )}
         </button>
       </form>
     </div>

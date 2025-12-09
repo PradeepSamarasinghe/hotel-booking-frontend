@@ -100,7 +100,9 @@ export default function AdminCategories() {
             
                   <td className="px-4 py-3">
                     <Link className="text-blue-500 hover:text-blue-700 mr-2"
-                    to={"/admin/updateCategory"}>
+                    to={"/admin/updateCategory"}
+                    state = {category}>
+                    
                       Edit
                     </Link>
                     <button onClick={() => {handleDelete(category.name)}} 
