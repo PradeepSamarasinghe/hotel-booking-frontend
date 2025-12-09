@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState, useEffect } from "react"
 import toast from "react-hot-toast"
-import {useNavigate} from "react-router-dom" 
+import {Link, useNavigate} from "react-router-dom" 
 
 export default function AdminCategories() {
 
@@ -99,9 +99,10 @@ export default function AdminCategories() {
                   </td>
             
                   <td className="px-4 py-3">
-                    <button className="text-blue-500 hover:text-blue-700 mr-2">
+                    <Link className="text-blue-500 hover:text-blue-700 mr-2"
+                    to={"/admin/updateCategory"}>
                       Edit
-                    </button>
+                    </Link>
                     <button onClick={() => {handleDelete(category.name)}} 
                     className="text-red-500 hover:text-red-700">
                       Delete

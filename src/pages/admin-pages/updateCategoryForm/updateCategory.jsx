@@ -2,7 +2,7 @@ import { useState } from "react";
 import { uploadImage } from "../../../utils/mediaUpload.js";
 import axios from "axios";
 
-export default function AddCategoryForm() {
+export default function UpdateCategory() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [features, setFeatures] = useState(""); // comma-separated
@@ -70,7 +70,7 @@ export default function AddCategoryForm() {
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md max-w-lg mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Add New Category</h2>
+      <h2 className="text-xl font-semibold mb-4">Update Category</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block mb-1 font-medium">Name</label>
@@ -137,7 +137,7 @@ export default function AddCategoryForm() {
                 isLoading?
                 <div className="border-t-2 border-t-white w-[20px] min-h-[20px] rounded-full animate-spin"></div>
                 :
-                <span>Add Category</span>
+                <span>Update Category</span>
 
             }
           
