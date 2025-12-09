@@ -58,7 +58,7 @@ export default function AdminGalleryItem() {
   };
 
   const handleEdit = (item) => {
-    navigate("/admin/updateGalleryItem", { state: item });
+    navigate("/admin/updateGalleryItemForm", { state: item });
   };
 
   return (

@@ -17,6 +17,7 @@ import AdminGalleryItem from "../admin-pages/galleryItem/adminGalleryItem.jsx";
 import AddCategoryForm from "../admin-pages/addCategoryForm/addCategoryForm.jsx";
 import UpdateCategory from "../admin-pages/updateCategoryForm/updateCategory.jsx";
 import AddGalleryItemForm from "../admin-pages/addGalleryItemForm/addGalleryItemForm.jsx";
+import UpdateGalleryItemForm from "../admin-pages/updateGalleryItemForm/updateGalleryItemForm.jsx";
 
 
 export default function AdminPage() {
@@ -65,6 +66,7 @@ export default function AdminPage() {
             <Route path="/feedback" element={<AdminFeedback />} />
             <Route path="/galleryItem" element={<AdminGalleryItem />} />
             <Route path="/addGalleryItemForm" element={<AddGalleryItemForm />} />
+            <Route path="/updateGalleryItemForm" element={<UpdateGalleryItemForm />} />
         </Routes>
       </div>
     </div>
