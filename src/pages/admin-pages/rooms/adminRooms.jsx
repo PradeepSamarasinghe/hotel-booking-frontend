@@ -118,7 +118,7 @@ export default function AdminRooms() {
 
                   <td className="px-4 py-3">
                     <Link
-                      to={"/admin/updateRoom"}
+                      to={"/admin/updateRoomForm"}
                       state={room}
                       className="text-blue-500 hover:text-blue-700 mr-3"
                     >
