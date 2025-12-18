@@ -4,7 +4,8 @@ import LoginPage from "./pages/login/login.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Categories from "./pages/client-pages/categories.jsx";
 import Test from "./components/tes/test.jsx";
-import { Toaster } from "react-hot-toast"; 
+import { Toaster } from "react-hot-toast";
+import AvailableRooms from "./pages/client-pages/availableRooms.jsx";
 
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
         <Route path="/categories" element={<Categories />} />
         <Route path="/admin/*" element={<AdminPage />} />
         <Route path="/test" element={<Test />}></Route>
+        <Route path="/available-rooms" element={<AvailableRooms />} />
+        
         {/* <Route path="/*" element={
           <div className="w-full h-screen flex justify-center items-center bg-red-500">
             <h1 className="text-white text-3xl font-bold">404 - Page Not Found</h1>

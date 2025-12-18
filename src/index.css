@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+/* Makes date picker icon white for dark backgrounds */
+.calendar-white::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+.calendar-white::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}

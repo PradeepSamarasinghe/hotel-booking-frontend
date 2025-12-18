@@ -1,14 +1,59 @@
 import Header from "../../components/header/header.jsx";
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, Calendar, Users, Phone, Mail, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
-
+import React, { useState, useEffect } from "react";
+import {
+  ChevronDown,
+  Calendar,
+  Users,
+  Phone,
+  Mail,
+  MapPin,
+  Facebook,
+  Instagram,
+  Twitter,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 // Hero Section with Booking Widget
 function HeroSection() {
-  const [checkIn, setCheckIn] = useState('');
-  const [checkOut, setCheckOut] = useState('');
-  const [roomType, setRoomType] = useState('deluxe');
+  const navigate = useNavigate();
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const [roomType, setRoomType] = useState("deluxe");
   const [guests, setGuests] = useState(2);
+
+  const handleCheckAvailability = () => {
+    // Validation
+    if (!checkIn || !checkOut) {
+      toast.error("Please select check-in and check-out dates");
+      return;
+    }
+
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (checkInDate < today) {
+      toast.error("Check-in date cannot be in the past");
+      return;
+    }
+
+    if (checkOutDate <= checkInDate) {
+      toast.error("Check-out date must be after check-in date");
+      return;
+    }
+
+    // Navigate to available rooms page with data
+    navigate("/available-rooms", {
+      state: {
+        checkIn,
+        checkOut,
+        category: roomType,
+        guests: parseInt(guests),
+      },
+    });
+  };
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
@@ -16,7 +61,8 @@ function HeroSection() {
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600')",
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600')",
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
@@ -81,9 +127,9 @@ function HeroSection() {
                 onChange={(e) => setRoomType(e.target.value)}
                 className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5A059]"
               >
-                <option value="deluxe">Deluxe Room</option>
-                <option value="premium">Premium Suite</option>
-                <option value="presidential">Presidential Suite</option>
+                <option value="deluxe">Deluxe</option>
+                <option value="standard">Standard</option>
+                <option value="suite">Suite</option>
               </select>
             </div>
 
@@ -100,7 +146,7 @@ function HeroSection() {
                 >
                   {[1, 2, 3, 4, 5, 6].map((num) => (
                     <option key={num} value={num}>
-                      {num} {num === 1 ? 'Guest' : 'Guests'}
+                      {num} {num === 1 ? "Guest" : "Guests"}
                     </option>
                   ))}
                 </select>
@@ -108,7 +154,10 @@ function HeroSection() {
             </div>
           </div>
 
-          <button className="w-full mt-6 bg-[#C5A059] text-white py-4 rounded-md hover:bg-[#B39049] transition-colors duration-300 font-semibold text-lg tracking-wide">
+          <button
+            onClick={handleCheckAvailability}
+            className="w-full mt-6 bg-[#C5A059] text-white py-4 rounded-md hover:bg-[#B39049] transition-colors duration-300 font-semibold text-lg tracking-wide"
+          >
             Check Availability
           </button>
         </div>
@@ -135,10 +184,16 @@ function IntroSection() {
               Experience Aurelia Grand
             </h2>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
-              Nestled in the heart of luxury, Aurelia Grand celebrates meticulous service through extraordinary experiences. Our commitment to excellence ensures every moment of your stay is crafted with precision and care.
+              Nestled in the heart of luxury, Aurelia Grand celebrates
+              meticulous service through extraordinary experiences. Our
+              commitment to excellence ensures every moment of your stay is
+              crafted with precision and care.
             </p>
             <p className="text-gray-600 text-lg leading-relaxed mb-8">
-              From our elegantly appointed rooms to our world-class dining venues, every detail has been thoughtfully designed to provide you with an unforgettable escape into refined comfort and timeless elegance.
+              From our elegantly appointed rooms to our world-class dining
+              venues, every detail has been thoughtfully designed to provide you
+              with an unforgettable escape into refined comfort and timeless
+              elegance.
             </p>
             <button className="px-8 py-3 bg-[#C5A059] text-white rounded-md hover:bg-[#B39049] transition-colors duration-300 font-semibold">
               Discover More
@@ -157,88 +212,3 @@ function IntroSection() {
   );
 }
 
-// Footer Component
-function Footer() {
-  return (
-    <footer className="bg-gray-900 text-white py-12 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <h3 className="font-['Playfair_Display'] text-2xl font-bold text-[#C5A059] mb-4">
-              AURELIA GRAND
-            </h3>
-            <p className="text-gray-400 mb-4">
-              Where luxury meets excellence in hospitality.
-            </p>
-            <div className="flex space-x-4">
-              <Facebook className="w-5 h-5 text-gray-400 hover:text-[#C5A059] cursor-pointer transition-colors" />
-              <Instagram className="w-5 h-5 text-gray-400 hover:text-[#C5A059] cursor-pointer transition-colors" />
-              <Twitter className="w-5 h-5 text-gray-400 hover:text-[#C5A059] cursor-pointer transition-colors" />
-            </div>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-[#C5A059] transition-colors">Accommodation</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-[#C5A059] transition-colors">Dining</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-[#C5A059] transition-colors">Experiences</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-[#C5A059] transition-colors">Gallery</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-4">Contact</h4>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2">
-                <MapPin className="w-5 h-5 text-[#C5A059] mt-1 flex-shrink-0" />
-                <span className="text-gray-400">123 Luxury Avenue, Paradise City</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Phone className="w-5 h-5 text-[#C5A059]" />
-                <span className="text-gray-400">+1 234 567 8900</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Mail className="w-5 h-5 text-[#C5A059]" />
-                <span className="text-gray-400">info@aureliagrand.com</span>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-4">Newsletter</h4>
-            <p className="text-gray-400 text-sm mb-4">
-              Subscribe to receive exclusive offers and updates.
-            </p>
-            <div className="flex">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#C5A059]"
-              />
-              <button className="px-4 py-2 bg-[#C5A059] text-white rounded-r-md hover:bg-[#B39049] transition-colors">
-                Send
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm">
-          <p>&copy; 2025 Aurelia Grand. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-// Main HomePage Component
-export default function HomePage() {
-  return (
-    <div className="font-sans">
-      <Header />
-      <HeroSection />
-      <IntroSection />
-      <Footer />
-    </div>
-  );
-}
